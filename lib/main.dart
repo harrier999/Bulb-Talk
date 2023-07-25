@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:bulbtalk/Rooms.dart';
+import 'package:bulbtalk/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:provider/provider.dart';
 
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -19,13 +21,31 @@ void main() {
   runApp(const MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) => const MaterialApp(
-        home: Scaffold(body: Rooms(),)
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+        create: (context) => RoomList(
+          rooms: [
+            [
+              types.TextMessage(
+                  id: randomString(),
+                  author: const types.User(id: "first"),
+                  text: "hello")
+            ],
+            [
+              types.TextMessage(
+                  id: randomString(),
+                  author: const types.User(id: "first"),
+                  text: "hello")
+            ]
+          ],
+        ),
+        child: const MaterialApp(
+            home: Scaffold(
+          body: Rooms(),
+        )),
       );
 }
 
@@ -39,7 +59,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<types.Message> _messages = [];
   final _user = const types.User(id: '82091008-a484-4a89-ae75-a22bf8d6f3ac');
-  final channel = WebSocketChannel.connect(Uri.parse(""));
+  final channel = WebSocketChannel.connect(Uri.parse("ws://141.164.50.18:8000/ws"));
 
   @override
   Widget build(BuildContext context) => Scaffold(

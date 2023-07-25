@@ -1,6 +1,8 @@
+import 'package:bulbtalk/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:provider/provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'dart:convert';
@@ -20,29 +22,30 @@ class Rooms extends StatefulWidget {
 }
 
 class _RoomsState extends State<Rooms> {
-  final List<List<types.Message>> messageListList = [
-    [
-      types.TextMessage(
-          id: randomString(),
-          author: const types.User(id: "first"),
-          text: "hello")
-    ],
-    [
-      types.TextMessage(
-          id: randomString(),
-          author: const types.User(id: "first"),
-          text: "hello")
-    ]
-  ];
+  // final List<List<types.Message>> messageListList = [
+  //   [
+  //     types.TextMessage(
+  //         id: randomString(),
+  //         author: const types.User(id: "first"),
+  //         text: "hello")
+  //   ],
+  //   [
+  //     types.TextMessage(
+  //         id: randomString(),
+  //         author: const types.User(id: "first"),
+  //         text: "hello")
+  //   ]
+  // ];
+  //var messageListList = Provider.of<RoomList>(context).rooms;
   final channel =
-      WebSocketChannel.connect(Uri.parse(""));
+      WebSocketChannel.connect(Uri.parse("ws://141.164.50.18:8000/ws"));
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: channel.stream,
       builder: (context, snapshot) {
-        messageListList[0].insert(
+        Provider.of<RoomList>(context).insertMessage(
             0,
             types.TextMessage(
               author: const types.User(id: "server"),
@@ -55,9 +58,9 @@ class _RoomsState extends State<Rooms> {
             return Room(
               roomName: "room # $index",
               recentMessage: "recent message",
-              numberOfUnreadMessages: messageListList[index].length,
+              numberOfUnreadMessages: Provider.of<RoomList>(context).rooms[index].length,
               roomNum: index,
-              messages: messageListList[index],
+              messages: Provider.of<RoomList>(context).rooms[index],
               channel: channel,
             );
           },
