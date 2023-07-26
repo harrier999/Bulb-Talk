@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:web_socket_channel/web_socket_channel.dart';
-
+import 'package:web_socket_channel/io.dart';
 import 'dart:convert';
 import 'dart:math';
 
@@ -34,8 +34,8 @@ class _RoomsState extends State<Rooms> {
           text: "hello")
     ]
   ];
-  final channel =
-      WebSocketChannel.connect(Uri.parse(""));
+  final channel = IOWebSocketChannel.connect("ws://141.164.50.18:8000/ws",
+      headers: {'connection-type': 'initial'});
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +93,14 @@ class Room extends StatefulWidget {
 }
 
 class _RoomState extends State<Room> {
+  late List<types.Message> _messages;
+
+  @override
+  void initState() {
+    super.initState();
+    _messages = widget.messages; // Initialize the messages list
+  }
+
   void onSendPressed(types.PartialText message) {
     final textMessage = types.TextMessage(
       author: widget.user,
@@ -102,7 +110,7 @@ class _RoomState extends State<Room> {
     );
     widget.channel.sink.add(textMessage.text);
     setState(() {
-      widget.messages.insert(0, textMessage);
+      _messages.insert(0, textMessage);
     });
   }
 
@@ -110,13 +118,17 @@ class _RoomState extends State<Room> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: ((context) {
-          return Chat(
-            messages: widget.messages,
-            onSendPressed: onSendPressed,
-            user: widget.user,
-          );
-        })));
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: ((context) {
+              return Chat(
+                messages: _messages,
+                onSendPressed: onSendPressed,
+                user: widget.user,
+              );
+            }),
+          ),
+        );
       },
       child: Container(
         decoration: BoxDecoration(
@@ -142,6 +154,29 @@ class _RoomState extends State<Room> {
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class Chatting extends StatefulWidget {
+  const Chatting({super.key});
+
+  @override
+  State<Chatting> createState() => _ChattingState();
+}
+
+class _ChattingState extends State<Chatting> {
+  final channel = IOWebSocketChannel.connect("ws://141.164.50.18:8000/ws",
+      headers: {'connection-type': 'chatting'});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: StreamBuilder(
+        stream: channel.stream,
+        builder: (context, snapshot) {
+          return Chat(messages: messages, onSendPressed: onSendPressed, user: user)
+        },
       ),
     );
   }
