@@ -5,6 +5,7 @@ import 'package:bulbtalk/Rooms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:get/get.dart';
 
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -19,66 +20,67 @@ void main() {
   runApp(const MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) => const MaterialApp(
-        home: Scaffold(body: Rooms(),)
+  Widget build(BuildContext context) => GetMaterialApp(
+        home: Scaffold(
+          body: Rooms(),
+        ),
       );
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+// class MyHomePage extends StatefulWidget {
+//   const MyHomePage({super.key});
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+//   @override
+//   State<MyHomePage> createState() => _MyHomePageState();
+// }
 
-class _MyHomePageState extends State<MyHomePage> {
-  final List<types.Message> _messages = [];
-  final _user = const types.User(id: '82091008-a484-4a89-ae75-a22bf8d6f3ac');
-  final channel = WebSocketChannel.connect(Uri.parse(""));
+// class _MyHomePageState extends State<MyHomePage> {
+//   final List<types.Message> _messages = [];
+//   final _user = const types.User(id: '82091008-a484-4a89-ae75-a22bf8d6f3ac');
+//   final channel = WebSocketChannel.connect(Uri.parse(""));
 
-  @override
-  Widget build(BuildContext context) => Scaffold(
-        body: StreamBuilder(
-            stream: channel.stream,
-            builder: (context, snapshot) {
-              snapshot.hasData
-                  ? _messages.insert(
-                      0,
-                      types.TextMessage(
-                        author: const types.User(id: "server"),
-                        id: randomString(),
-                        text: snapshot.data.toString(),
-                      ),
-                    )
-                  : print("nothing");
-              return Chat(
-                messages: _messages,
-                onSendPressed: _handleSendPressed,
-                user: _user,
-              );
-            }),
-      );
+//   @override
+//   Widget build(BuildContext context) => Scaffold(
+//         body: StreamBuilder(
+//             stream: channel.stream,
+//             builder: (context, snapshot) {
+//               snapshot.hasData
+//                   ? _messages.insert(
+//                       0,
+//                       types.TextMessage(
+//                         author: const types.User(id: "server"),
+//                         id: randomString(),
+//                         text: snapshot.data.toString(),
+//                       ),
+//                     )
+//                   : print("nothing");
+//               return Chat(
+//                 messages: _messages,
+//                 onSendPressed: _handleSendPressed,
+//                 user: _user,
+//               );
+//             }),
+//       );
 
-  void _addMessage(types.Message message) {
-    setState(() {
-      _messages.insert(0, message);
-    });
-  }
+//   void _addMessage(types.Message message) {
+//     setState(() {
+//       _messages.insert(0, message);
+//     });
+//   }
 
-  void _handleSendPressed(types.PartialText message) {
-    final textMessage = types.TextMessage(
-      author: _user,
-      createdAt: DateTime.now().millisecondsSinceEpoch,
-      id: randomString(),
-      text: message.text,
-    );
-    channel.sink.add(textMessage.text);
+//   void _handleSendPressed(types.PartialText message) {
+//     final textMessage = types.TextMessage(
+//       author: _user,
+//       createdAt: DateTime.now().millisecondsSinceEpoch,
+//       id: randomString(),
+//       text: message.text,
+//     );
+//     channel.sink.add(textMessage.text);
 
-    _addMessage(textMessage);
-  }
-}
+//     _addMessage(textMessage);
+//   }
+// }
