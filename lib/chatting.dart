@@ -5,6 +5,8 @@ import 'package:web_socket_channel/io.dart';
 
 import 'dart:convert';
 import 'dart:math';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 String randomString() {
   final random = Random.secure();
@@ -45,38 +47,45 @@ class _ChattingState extends State<Chatting> {
   }
 
   void createSocket() {
-    socket = IOWebSocketChannel.connect("ws://141.164.50.18:8000/ws");
+    String? chattingServerURL = dotenv.env['CHATTING_SERVER_URL'];
+    if (chattingServerURL == null) {
+      Fluttertoast.showToast(
+          msg: "Failed to create connection to server. Error 101");
+      return;
+    }
+    socket = IOWebSocketChannel.connect(chattingServerURL + "/ws");
+    socket.stream.listen((event) {
+      setState(() {
+        chat.insert(
+          0,
+          types.ImageMessage(
+            author: types.User(
+                id: "server",
+                firstName: "aloha ",
+                lastName: "can",
+                imageUrl:
+                    "https://blog.kakaocdn.net/dn/eERcfo/btqK7cioPfB/weKJpVnfZDk3RB2JOXBfTK/img.png"),
+            id: randomString(),
+            uri:
+                "https://blog.kakaocdn.net/dn/eERcfo/btqK7cioPfB/weKJpVnfZDk3RB2JOXBfTK/img.png",
+            name: "gp",
+            size: 1,
+            
+          ),
+        );
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          chat.insert(
-            0,
-            types.TextMessage(
-              author: types.User(
-                id: "server",
-                firstName: "fdsa",
-                lastName: "fdsa",
-                imageUrl:
-                    'https://blog.kakaocdn.net/dn/eERcfo/btqK7cioPfB/weKJpVnfZDk3RB2JOXBfTK/img.png',
-              ),
-              id: randomString(),
-              text: snapshot.data.toString(),
-            ),
-          );
-        }
-        return Chat(
-          messages: chat,
-          onSendPressed: onSendPressed,
-          user: user,
-          showUserAvatars: true,
-          showUserNames: true,
-        );
-      },
-      stream: socket.stream,
+    return Chat(
+      messages: chat,
+      onSendPressed: onSendPressed,
+      user: user,
+      showUserAvatars: true,
+      showUserNames: true,
+      
     );
   }
 
@@ -87,6 +96,9 @@ class _ChattingState extends State<Chatting> {
       id: randomString(),
       text: message.text,
     );
+    // setState(() {
+    //   chat.insert(0, textMessage);
+    // });
     socket.sink.add(json.encode(textMessage.toJson()));
   }
 }

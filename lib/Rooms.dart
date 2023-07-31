@@ -21,23 +21,6 @@ class Rooms extends StatefulWidget {
 }
 
 class _RoomsState extends State<Rooms> {
-  // final List<List<types.Message>> messageListList = [
-  //   [
-  //     types.TextMessage(
-  //         id: randomString(),
-  //         author: const types.User(id: "first"),
-  //         text: "hello")
-  //   ],
-  //   [
-  //     types.TextMessage(
-  //         id: randomString(),
-  //         author: const types.User(id: "first"),
-  //         text: "hello")
-  //   ]
-  // ];
-  // final channel =
-  //     WebSocketChannel.connect(Uri.parse("ws://141.164.50.18:8000/rooms"));
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -49,31 +32,6 @@ class _RoomsState extends State<Rooms> {
         Room(roomName: "good", recentMessage: "how are you", roomNum: 33),
       ],
     );
-    // return StreamBuilder(
-    //   stream: channel.stream,
-    //   builder: (context, snapshot) {
-    //     messageListList[0].insert(
-    //         0,
-    //         types.TextMessage(
-    //           author: const types.User(id: "server"),
-    //           id: randomString().toString(),
-    //           text: snapshot.data.toString(),
-    //         ));
-    //     return ListView.builder(
-    //       itemCount: 2,
-    //       itemBuilder: (context, index) {
-    //         return Room(
-    //           roomName: "room # $index",
-    //           recentMessage: "recent message",
-    //           numberOfUnreadMessages: messageListList[index].length,
-    //           roomNum: index,
-    //           messages: messageListList[index],
-    //           channel: channel,
-    //         );
-    //       },
-    //     );
-    //   },
-    // );
   }
 }
 
@@ -95,52 +53,18 @@ class Room extends StatefulWidget {
   final String roomName;
   final int roomNum;
   final String recentMessage;
-  // final int numberOfUnreadMessages;
-  // final List<types.Message> messages;
-  // final WebSocketChannel channel;
 
   @override
   State<Room> createState() => _RoomState();
 }
 
 class _RoomState extends State<Room> {
-  // void onSendPressed(types.PartialText message) {
-  //   final textMessage = types.TextMessage(
-  //     author: widget.user,
-  //     createdAt: DateTime.now().millisecondsSinceEpoch,
-  //     id: randomString(),
-  //     text: message.text,
-  //   );
-  //   widget.channel.sink.add(textMessage.text);
-  //   setState(() {
-  //     widget.messages.insert(0, textMessage);
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         Get.to(() => Chatting());
-
-        // Navigator.of(context)
-        //     .push(MaterialPageRoute(builder: (context) => Chatting()));
-
-        // Navigator.of(context).push(MaterialPageRoute(builder: ((context) {
-        //   return Chat(
-        //     messages: widget.messages,
-        //     onSendPressed: onSendPressed,
-        //     user: widget.user,
-        //   );
-        // })));
       },
-      // Navigator.of(context).push(MaterialPageRoute(builder: ((context) {
-      //   return Chat(
-      //     messages: widget.messages,
-      //     onSendPressed: onSendPressed,
-      //     user: widget.user,
-      //   );
-      // })));
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
@@ -173,7 +97,7 @@ class _RoomState extends State<Room> {
 
 class StaticAvatar extends StatelessWidget {
   StaticAvatar({super.key, this.avatarURL});
-  String? avatarURL;
+  final String? avatarURL;
 
   @override
   Widget build(BuildContext context) {
