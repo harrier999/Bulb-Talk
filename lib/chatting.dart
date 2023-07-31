@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 
 String randomString() {
   final random = Random.secure();
@@ -41,7 +42,7 @@ class _ChattingState extends State<Chatting> {
 
   void getUserID() {
     user = types.User(
-        id: "me",
+        id: randomString(),
         imageUrl:
             'https://blog.kakaocdn.net/dn/eERcfo/btqK7cioPfB/weKJpVnfZDk3RB2JOXBfTK/img.png');
   }
@@ -53,39 +54,41 @@ class _ChattingState extends State<Chatting> {
           msg: "Failed to create connection to server. Error 101");
       return;
     }
-    socket = IOWebSocketChannel.connect(chattingServerURL + "/ws");
-    socket.stream.listen((event) {
-      setState(() {
-        chat.insert(
-          0,
-          types.ImageMessage(
-            author: types.User(
-                id: "server",
-                firstName: "aloha ",
-                lastName: "can",
-                imageUrl:
-                    "https://blog.kakaocdn.net/dn/eERcfo/btqK7cioPfB/weKJpVnfZDk3RB2JOXBfTK/img.png"),
-            id: randomString(),
-            uri:
-                "https://blog.kakaocdn.net/dn/eERcfo/btqK7cioPfB/weKJpVnfZDk3RB2JOXBfTK/img.png",
-            name: "gp",
-            size: 1,
-            
-          ),
-        );
-      });
-    });
+    socket = IOWebSocketChannel.connect(chattingServerURL + "/chat",
+        headers: {"user_id": user.id});
+    socket.stream.listen(
+      (event) {
+        setState(() {
+          var data = json.decode(event);
+          chat.insert(0, types.Message.fromJson(data));
+        });
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    socket.sink.close();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Chat(
-      messages: chat,
-      onSendPressed: onSendPressed,
-      user: user,
-      showUserAvatars: true,
-      showUserNames: true,
-      
+    return Scaffold(
+      appBar: AppBar(
+          leading: IconButton(
+        icon: Icon(
+          Icons.arrow_back,
+        ),
+        onPressed: () => Get.back(),
+      )),
+      body: Chat(
+        messages: chat,
+        onSendPressed: onSendPressed,
+        user: user,
+        showUserAvatars: true,
+        showUserNames: true,
+      ),
     );
   }
 
