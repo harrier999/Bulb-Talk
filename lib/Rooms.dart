@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:get/get.dart';
 
 import 'dart:convert';
@@ -23,34 +22,44 @@ class Rooms extends StatefulWidget {
 class _RoomsState extends State<Rooms> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 100,
-        ),
-        Room(roomName: "roomName", recentMessage: "hell", room_id: 31),
-        Room(roomName: "good", recentMessage: "how are you", room_id: 33),
-      ],
+    return Scaffold(
+      body: Column(
+        children: [
+          SizedBox(
+            height: 100,
+          ),
+          Room(
+            roomName: "roomName",
+            recentMessage: "hell",
+            room_id: 31,
+            user_id: Get.arguments["user_id"],
+          ),
+          Room(
+            roomName: "good",
+            recentMessage: "how are you",
+            room_id: 33,
+            user_id: Get.arguments["user_id"],
+          ),
+        ],
+      ),
     );
   }
 }
 
 class Room extends StatefulWidget {
-  const Room({
-    super.key,
-    required this.roomName,
-    required this.recentMessage,
-    // required this.numberOfUnreadMessages,
-    required this.room_id,
-    // required this.messages,
-    // required this.channel
-  });
-
-  final user = const types.User(
-    id: "first",
-  );
+  const Room(
+      {super.key,
+      required this.roomName,
+      required this.recentMessage,
+      // required this.numberOfUnreadMessages,
+      required this.room_id,
+      required this.user_id
+      // required this.messages,
+      // required this.channel
+      });
 
   final String roomName;
+  final String user_id;
   final int room_id;
   final String recentMessage;
 
@@ -63,7 +72,8 @@ class _RoomState extends State<Room> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => Chatting(), arguments: {"room_id": widget.room_id});
+        Get.to(() => Chatting(),
+            arguments: {"room_id": widget.room_id, "user_id": widget.user_id});
       },
       child: Container(
         decoration: BoxDecoration(

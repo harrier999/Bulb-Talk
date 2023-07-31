@@ -9,7 +9,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
-
 String randomString() {
   final random = Random.secure();
   final values = List<int>.generate(16, (i) => random.nextInt(255));
@@ -42,8 +41,10 @@ class _ChattingState extends State<Chatting> {
   }
 
   void getUserID() {
+    print("user_id: " + Get.arguments["user_id"]);
+    print("url: " + dotenv.env['CHATTING_SERVER_URL']!);
     user = types.User(
-        id: randomString(),
+        id: Get.arguments["user_id"],
         imageUrl:
             'https://blog.kakaocdn.net/dn/eERcfo/btqK7cioPfB/weKJpVnfZDk3RB2JOXBfTK/img.png');
   }
@@ -89,19 +90,17 @@ class _ChattingState extends State<Chatting> {
         user: user,
         showUserAvatars: true,
         showUserNames: true,
-        
       ),
     );
   }
 
   void onSendPressed(types.PartialText message) {
     final textMessage = types.TextMessage(
-      author: user,
-      createdAt: DateTime.now().millisecondsSinceEpoch,
-      id: randomString(),
-      text: message.text,
-      roomId: "31"
-    );
+        author: user,
+        createdAt: DateTime.now().millisecondsSinceEpoch,
+        id: randomString(),
+        text: message.text,
+        roomId: "31");
     // setState(() {
     //   chat.insert(0, textMessage);
     // });

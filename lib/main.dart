@@ -1,14 +1,10 @@
-import 'dart:convert';
-import 'dart:math';
-
-import 'package:bulbtalk/Rooms.dart';
+import 'package:bulbtalk/login.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-
-void main() async{
+void main() async {
   await dotenv.load(fileName: '.env');
 
   runApp(const MyApp());
@@ -20,7 +16,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GetMaterialApp(
         home: Scaffold(
-          body: Rooms(),
+          appBar: AppBar(),
+          body: LoginPage(),
         ),
       );
 }
