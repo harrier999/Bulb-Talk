@@ -28,8 +28,8 @@ class _RoomsState extends State<Rooms> {
         SizedBox(
           height: 100,
         ),
-        Room(roomName: "roomName", recentMessage: "hell", roomNum: 31),
-        Room(roomName: "good", recentMessage: "how are you", roomNum: 33),
+        Room(roomName: "roomName", recentMessage: "hell", room_id: 31),
+        Room(roomName: "good", recentMessage: "how are you", room_id: 33),
       ],
     );
   }
@@ -41,7 +41,7 @@ class Room extends StatefulWidget {
     required this.roomName,
     required this.recentMessage,
     // required this.numberOfUnreadMessages,
-    required this.roomNum,
+    required this.room_id,
     // required this.messages,
     // required this.channel
   });
@@ -51,7 +51,7 @@ class Room extends StatefulWidget {
   );
 
   final String roomName;
-  final int roomNum;
+  final int room_id;
   final String recentMessage;
 
   @override
@@ -63,7 +63,7 @@ class _RoomState extends State<Room> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => Chatting());
+        Get.to(() => Chatting(), arguments: {"room_id": widget.room_id});
       },
       child: Container(
         decoration: BoxDecoration(

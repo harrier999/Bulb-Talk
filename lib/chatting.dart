@@ -9,6 +9,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+
 String randomString() {
   final random = Random.secure();
   final values = List<int>.generate(16, (i) => random.nextInt(255));
@@ -35,7 +36,7 @@ class _ChattingState extends State<Chatting> {
     createSocket();
   }
 
-  void getChatFromDB() {
+  void getChatFromDB() async {
     chat = [];
     return;
   }
@@ -55,7 +56,7 @@ class _ChattingState extends State<Chatting> {
       return;
     }
     socket = IOWebSocketChannel.connect(chattingServerURL + "/chat",
-        headers: {"user_id": user.id});
+        headers: {"user_id": user.id, "room_id": Get.arguments["room_id"]});
     socket.stream.listen(
       (event) {
         setState(() {
@@ -88,6 +89,7 @@ class _ChattingState extends State<Chatting> {
         user: user,
         showUserAvatars: true,
         showUserNames: true,
+        
       ),
     );
   }
@@ -98,6 +100,7 @@ class _ChattingState extends State<Chatting> {
       createdAt: DateTime.now().millisecondsSinceEpoch,
       id: randomString(),
       text: message.text,
+      roomId: "31"
     );
     // setState(() {
     //   chat.insert(0, textMessage);
