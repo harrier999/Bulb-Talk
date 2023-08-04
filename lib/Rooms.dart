@@ -23,6 +23,9 @@ class _RoomsState extends State<Rooms> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: () => Get.back()),
+      ),
       body: Column(
         children: [
           SizedBox(
