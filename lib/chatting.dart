@@ -62,7 +62,13 @@ class _ChattingState extends State<Chatting> {
       (event) {
         setState(() {
           var data = json.decode(event);
-          chat.insert(0, types.Message.fromJson(data));
+          if (data["messageType"] == "messageList") {
+            for (var i = data["payload"]["messages"].length - 1; i >= 0; i--) {
+              chat.add(types.Message.fromJson(data["payload"]["messages"][i]));
+            }
+          } else {
+            chat.insert(0, types.Message.fromJson(data["payload"]));
+          }
         });
       },
     );
