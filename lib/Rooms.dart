@@ -34,13 +34,13 @@ class _RoomsState extends State<Rooms> {
           Room(
             roomName: "roomName",
             recentMessage: "hell",
-            room_id: 31,
+            room_id: "31",
             user_id: Get.arguments["user_id"],
           ),
           Room(
             roomName: "good",
             recentMessage: "how are you",
-            room_id: 33,
+            room_id: "33",
             user_id: Get.arguments["user_id"],
           ),
         ],
@@ -63,7 +63,7 @@ class Room extends StatefulWidget {
 
   final String roomName;
   final String user_id;
-  final int room_id;
+  final String room_id;
   final String recentMessage;
 
   @override
