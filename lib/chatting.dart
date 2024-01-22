@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'dart:convert';
 import 'dart:math';
@@ -25,7 +25,7 @@ class Chatting extends StatefulWidget {
 class _ChattingState extends State<Chatting> {
   late List<types.Message> chat; //chatting message list of this chatting room
   late types.User user; // user of this phone
-  late IOWebSocketChannel socket; // websocket for this chatting room
+  late WebSocketChannel socket; // websocket for this chatting room
 
   @override
   void initState() {
@@ -56,8 +56,7 @@ class _ChattingState extends State<Chatting> {
           msg: "Failed to create connection to server. Error 101");
       return;
     }
-    socket = IOWebSocketChannel.connect(chattingServerURL + "/chat",
-        headers: {"user_id": user.id, "room_id": Get.arguments["room_id"]});
+    socket = WebSocketChannel.connect(Uri.parse(chattingServerURL + "/chat"));
     socket.stream.listen(
       (event) {
         setState(() {
