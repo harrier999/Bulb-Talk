@@ -1,9 +1,7 @@
-import 'package:bulbtalk/login.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'beforeLogin/FirstPage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'beforeLogin/firstPage.dart';
 
 void main() async {
   await dotenv.load(fileName: '.env');
@@ -28,14 +26,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => GetMaterialApp(
+        title: "Bulb Talk",
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch(
-            //1
-            primarySwatch: Colors.orange, //2
-            accentColor: Colors.orangeAccent, //4
-          ).copyWith(
-            secondary: Colors.amber,
-          ),
+          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.amber)
+              .copyWith(background: Colors.orange),
         ),
         home: FirstPage(),
       );
