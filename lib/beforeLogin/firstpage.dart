@@ -2,6 +2,7 @@ import 'package:bulbtalk/login.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:bulbtalk/beforeLogin/login.dart';
 
 class FirstPage extends StatelessWidget {
   const FirstPage({super.key});
@@ -82,7 +83,7 @@ class FirstPage extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () => Get.to(
-                      () => LoginPage(),
+                      () => Login(),
                       transition: Transition.rightToLeft,
                     ),
                     child: Text("Login",

@@ -27,6 +27,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GetMaterialApp(
         title: "Bulb Talk",
+        theme: ThemeData(
+          primarySwatch: Colors.orange,
+          buttonTheme: ButtonThemeData(
+            buttonColor: Colors.orange,
+            textTheme: ButtonTextTheme.primary,
+            colorScheme: ColorScheme.light(primary: Colors.orange),
+          ),
+        ),
         home: FirstPage(),
       );
 }
