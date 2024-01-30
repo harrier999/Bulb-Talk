@@ -8,7 +8,7 @@ class FirstPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Colors.orange,
         body: Container(
           padding: EdgeInsets.all(50),
           child: Column(
@@ -31,6 +31,7 @@ class FirstPage extends StatelessWidget {
                     Text(
                       "BulbTalk",
                       style: TextStyle(
+                        color: Colors.white,
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
                       ),
@@ -38,6 +39,7 @@ class FirstPage extends StatelessWidget {
                     Text(
                       "Let's talk with BulbTalk",
                       style: TextStyle(
+                        color: Colors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -54,11 +56,19 @@ class FirstPage extends StatelessWidget {
                 child: Container(
                   width: double.infinity,
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.orange[800],
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
                     onPressed: () => Get.to(
                       () => LoginPage(),
                       transition: Transition.rightToLeft,
                     ),
-                    child: Text("Sign up"),
+                    child: Text("Sign up",
+                        style: TextStyle(color: Colors.orange[800])),
                   ),
                 ),
               ),
@@ -66,14 +76,17 @@ class FirstPage extends StatelessWidget {
                   child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Already have an account?"),
+                  Text(
+                    "Already have an account?",
+                    style: TextStyle(color: Colors.white.withOpacity(0.8)),
+                  ),
                   TextButton(
                     onPressed: () => Get.to(
                       () => LoginPage(),
                       transition: Transition.rightToLeft,
                     ),
                     child: Text("Login",
-                        style: TextStyle(color: Colors.amber[900])),
+                        style: TextStyle(color: Colors.orange[900])),
                   ),
                 ],
               ))

@@ -27,10 +27,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GetMaterialApp(
         title: "Bulb Talk",
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.amber)
-              .copyWith(background: Colors.orange),
-        ),
         home: FirstPage(),
       );
 }
