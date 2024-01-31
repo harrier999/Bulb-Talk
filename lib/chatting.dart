@@ -56,19 +56,32 @@ class _ChattingState extends State<Chatting> {
           msg: "Failed to create connection to server. Error 101");
       return;
     }
+
     socket = WebSocketChannel.connect(Uri.parse(chattingServerURL + "/chat"));
+
     socket.stream.listen(
       (event) {
-        setState(() {
-          var data = json.decode(event);
-          if (data["messageType"] == "messageList") {
-            for (var i = data["payload"]["messages"].length - 1; i >= 0; i--) {
-              chat.add(types.Message.fromJson(data["payload"]["messages"][i]));
+        setState(
+          () {
+            var data = json.decode(event);
+            if (data["messageType"] == "messageList") {
+              for (var i = data["payload"]["messages"].length - 1;
+                  i >= 0;
+                  i--) {
+                chat.add(
+                    types.Message.fromJson(data["payload"]["messages"][i]));
+              }
+            } else {
+              chat.insert(0, types.Message.fromJson(data["payload"]));
             }
-          } else {
-            chat.insert(0, types.Message.fromJson(data["payload"]));
-          }
-        });
+          },
+        );
+      },
+      onError: (error) {
+        Fluttertoast.showToast(
+          msg: error.toString(),
+        );
+        Get.back();
       },
     );
   }
