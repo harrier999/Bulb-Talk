@@ -58,6 +58,7 @@ class _ChattingState extends State<Chatting> {
     }
 
     socket = WebSocketChannel.connect(Uri.parse(chattingServerURL + "/chat"));
+    socket.sink.add(json.encode({"roomId": "31", "user_id": user.id}));
 
     socket.stream.listen(
       (event) {
