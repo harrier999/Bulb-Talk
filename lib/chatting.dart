@@ -26,6 +26,7 @@ class _ChattingState extends State<Chatting> {
   late List<types.Message> chat; //chatting message list of this chatting room
   late types.User user; // user of this phone
   late WebSocketChannel socket; // websocket for this chatting room
+  late String room_id; // room id of this chatting room
 
   @override
   void initState() {
@@ -43,6 +44,8 @@ class _ChattingState extends State<Chatting> {
   void getUserID() {
     print("user_id: " + Get.arguments["user_id"]);
     print("url: " + dotenv.env['CHATTING_SERVER_URL']!);
+    print("room_id: " + Get.arguments["room_id"]!);
+    room_id = Get.arguments["room_id"];
     user = types.User(
         id: Get.arguments["user_id"],
         imageUrl:
@@ -58,7 +61,7 @@ class _ChattingState extends State<Chatting> {
     }
 
     socket = WebSocketChannel.connect(Uri.parse(chattingServerURL + "/chat"));
-    socket.sink.add(json.encode({"roomId": "31", "user_id": user.id}));
+    socket.sink.add(json.encode({"room_id": room_id , "user_id": user.id}));
 
     socket.stream.listen(
       (event) {
